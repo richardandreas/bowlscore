@@ -14,8 +14,8 @@ RSpec.describe PlayerScore do
     it { expect(jeff_score.frames.first).to be_a Frame }
     it { expect(jeff_score.frames.first.rolls).to eq [10] }
     it { expect(jeff_score.frames.last.rolls).to eq [10, 8, 1] }
-    it { expect(john_rolls.frames.first.rolls).to eq [3, 7] }
-    it { expect(john_rolls.frames.last.rolls).to eq [3, 7] }
+    it { expect(john_score.frames.first.rolls).to eq [3, 7] }
+    it { expect(john_score.frames.last.rolls).to eq [3, 7] }
   end
 
   describe '#scores' do
@@ -27,7 +27,7 @@ RSpec.describe PlayerScore do
 
   describe '#valid?' do
     it { expect(jeff_score.valid?).to be_truthy }
-    it { expect(john_rolls.valid?).to be_truthy }
+    it { expect(john_score.valid?).to be_truthy }
     it { expect(PlayerScore.new(to_less_rolls).valid?).to be_falsey }
     it { expect(PlayerScore.new(to_much_rolls).valid?).to be_falsey }
   end
