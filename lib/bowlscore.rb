@@ -1,3 +1,5 @@
+require 'file_parsers/bowlscore_file_parser'
+
 # Main application class
 class Bowlscore
   def self.start

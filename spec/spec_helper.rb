@@ -1,3 +1,5 @@
+$LOAD_PATH << '../lib'
+
 require 'simplecov'
 require 'byebug'
 
@@ -10,7 +12,7 @@ end
 SimpleCov.start 'tjce-profile'
 
 # Require rspec covered files here
-require './lib/bowlscore.rb'
+require 'bowlscore'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
