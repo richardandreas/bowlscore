@@ -1,4 +1,8 @@
+require 'player_score'
 require 'file_parsers/bowlscore_file_parser'
+
+# For debugging
+require 'byebug'
 
 # Main application class
 class Bowlscore
