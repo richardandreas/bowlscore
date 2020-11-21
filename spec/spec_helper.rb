@@ -13,7 +13,6 @@ SimpleCov.start 'tjce-profile'
 
 # Require rspec covered files here
 require 'bowlscore'
-require 'file_parsers/bowlscore_file_parser'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
