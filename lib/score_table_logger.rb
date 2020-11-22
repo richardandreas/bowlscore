@@ -1,13 +1,7 @@
 # Prints the scoring table to console
 class ScoreTableLogger
   class << self
-    def print(player_score, player_name)
-      print_header
-      puts player_name
-      print_pinfalls(player_score.parsed_rolls, player_score.rolls)
-      print_scores(player_score.scores)
-    end
-
+    # Prints the table header
     def print_header
       print_line = "Frames"
 
@@ -16,6 +10,13 @@ class ScoreTableLogger
       end
 
       puts print_line
+    end
+
+    # Prints the whole table hody
+    def print(player_score, player_name)
+      puts player_name
+      print_pinfalls(player_score.parsed_rolls, player_score.rolls)
+      print_scores(player_score.scores)
     end
 
     def print_pinfalls(parsed_rolls, rolls)
@@ -47,7 +48,7 @@ class ScoreTableLogger
       scores.each do |score|
         print_line << "\t\t#{score}"
       end
-  
+
       puts print_line
     end
   end
