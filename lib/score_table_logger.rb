@@ -1,0 +1,54 @@
+# Prints the scoring table to console
+class ScoreTableLogger
+  class << self
+    def print(player_score, player_name)
+      print_header
+      puts player_name
+      print_pinfalls(player_score.rolls)
+      print_scores(player_score.scores)
+    end
+
+    def print_header
+      print_line = "Frames"
+
+      10.times do |index|
+        print_line << "\t\t#{index + 1}"
+      end
+
+      puts print_line
+    end
+
+    def print_pinfalls(rolls)
+      print_line  = "Pinfalls"
+      table_index = 0
+
+      rolls.each_with_index do |score, index|
+        if score.nil?
+          print_line << "\tF"
+        elsif score == 10
+          print_line << "\t" if table_index < 18
+          print_line << "\tX"
+          table_index += 1
+        elsif (table_index % 2 == 1) && (rolls[index - 1] + score == 10)
+          print_line << "\t/"
+        else
+          print_line << "\t#{score}"
+        end
+
+        table_index += 1
+      end
+
+      puts print_line
+    end
+
+    def print_scores(scores)
+      print_line = "Score"
+  
+      scores.each do |score|
+        print_line << "\t\t#{score}"
+      end
+  
+      puts print_line
+    end
+  end
+end

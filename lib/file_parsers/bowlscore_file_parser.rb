@@ -5,8 +5,9 @@ class BowlscoreFileParser
     def parse(path_to_file)
       @file = File.open(path_to_file)
       @file.read.split("\n").map do |line|
-        tuple = line.split(" ")
-        [tuple.first, tuple.last.to_i]
+        player, score = line.split(" ")
+        score = score == 'F' ? nil : score.to_i
+        [player, score]
       end
     end
   end
