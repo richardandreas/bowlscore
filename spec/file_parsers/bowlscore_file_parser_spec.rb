@@ -5,7 +5,7 @@ RSpec.describe BowlscoreFileParser do
     subject { BowlscoreFileParser.parse(path_to_file) }
     it { expect(subject).to be_a Array }
     it { expect(subject.length).to eq 35 }
-    it { expect(subject.first).to eq ['Jeff', 10] }
-    it { expect(subject.last).to eq ['John', 0] }
+    it { expect(subject.first).to eq ['Jeff', '10'] }
+    it { expect(subject.last).to eq ['John', '0'] }
   end
 end

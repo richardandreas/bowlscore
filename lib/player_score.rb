@@ -1,11 +1,12 @@
 # Initializes with an array of rolls from a single player and calculates the scores of the full
 # game.
 class PlayerScore
-  attr_reader :errors, :rolls, :scores, :total_score, :valid
+  attr_reader :errors, :parsed_rolls, :rolls, :scores, :total_score, :valid
 
   def initialize(rolls)
-    @rolls  = rolls
-    @errors = []
+    @rolls        = rolls
+    @parsed_rolls = rolls.map { |score| score.to_i }
+    @errors       = []
 
     validate_positive_numbers
     validate_tenth_frame
@@ -46,30 +47,30 @@ class PlayerScore
 
   # Checks if the rolls dataset is free of negative numbers
   def validate_positive_numbers
-    @errors << 'Negative points are not allowed' if @rolls.any? { |n| n < 0 }
+    @errors << 'Negative points are not allowed' if @parsed_rolls.any? { |n| n < 0 }
   end
 
   # Checks for the third roll in tenth frame with strike
   def validate_tenth_frame
-    @rolls_count = @rolls.count + @rolls.count(10)
+    @parsed_rolls_count = @parsed_rolls.count + @parsed_rolls.count(10)
 
-    if @rolls_count == 21 && @rolls[-2] == 10
+    if @parsed_rolls_count == 21 && @parsed_rolls[-2] == 10
       @errors << 'Tenth frame needs third roll'
-    elsif @rolls_count >= 21 && !third_roll_in_tenth_frame
+    elsif @parsed_rolls_count >= 21 && !third_roll_in_tenth_frame
       @errors << 'Number of rolls is too long'
     end
   end
 
   def third_roll_in_tenth_frame
-    @rolls_count == 22 && @rolls[-3] == 10
+    @parsed_rolls_count == 22 && @parsed_rolls[-3] == 10
   end
 
   def next_points
-    @rolls[@frame_index + 1]
+    @parsed_rolls[@frame_index + 1]
   end
 
   def after_next_points
-    @rolls[@frame_index + 2]
+    @parsed_rolls[@frame_index + 2]
   end
 
   def next_two_points
@@ -77,7 +78,7 @@ class PlayerScore
   end
 
   def current_points
-    @rolls[@frame_index]
+    @parsed_rolls[@frame_index]
   end
 
   def strike?
