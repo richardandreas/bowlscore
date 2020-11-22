@@ -1,5 +1,6 @@
 RSpec.describe ScoreTableLogger do
-  let(:player_rolls) { [10, 7, 3, 9, 0, 10, 0, 8, 8, 2, 0, 6, 10, 10, 10, 8, 1] }
+  let(:player_rolls) { ['10', '7', '3', '9', '0', '10', '0', '8', '8', '2', 'F', '6', '10', '10', '10', '8', '1'] }
+  let(:player_parsed_rolls) { [10, 7, 3, 9, 0, 10, 0, 8, 8, 2, 0, 6, 10, 10, 10, 8, 1] }
   let(:player_scores) { [20, 39, 48, 66, 74, 84, 90, 120, 148, 167] }
   let(:player_score) { PlayerScore.new(player_rolls) }
 
@@ -12,7 +13,7 @@ RSpec.describe ScoreTableLogger do
   end
 
   describe '#print_pinfalls' do
-    it { expect { ScoreTableLogger.print_pinfalls(player_rolls) }.to output(pinfalls).to_stdout }
+    it { expect { ScoreTableLogger.print_pinfalls(player_parsed_rolls, player_rolls) }.to output(pinfalls).to_stdout }
   end
 
   describe '#print_scores' do
@@ -21,6 +22,6 @@ RSpec.describe ScoreTableLogger do
 
   describe '#print' do
     it { expect { ScoreTableLogger.print(player_score, 'Jeff') }
-         .to output(header + "\nJeff\n" + pinfalls + "\n" + scores + "\n").to_stdout }
+         .to output(header + "Jeff\n" + pinfalls + scores).to_stdout }
   end
 end

@@ -4,7 +4,7 @@ class ScoreTableLogger
     def print(player_score, player_name)
       print_header
       puts player_name
-      print_pinfalls(player_score.rolls)
+      print_pinfalls(player_score.parsed_rolls, player_score.rolls)
       print_scores(player_score.scores)
     end
 
@@ -18,18 +18,18 @@ class ScoreTableLogger
       puts print_line
     end
 
-    def print_pinfalls(rolls)
+    def print_pinfalls(parsed_rolls, rolls)
       print_line  = "Pinfalls"
       table_index = 0
 
-      rolls.each_with_index do |score, index|
-        if score.nil?
+      parsed_rolls.each_with_index do |score, index|
+        if rolls[index] == 'F'
           print_line << "\tF"
         elsif score == 10
           print_line << "\t" if table_index < 18
           print_line << "\tX"
           table_index += 1
-        elsif (table_index % 2 == 1) && (rolls[index - 1] + score == 10)
+        elsif (table_index % 2 == 1) && (parsed_rolls[index - 1] + score == 10)
           print_line << "\t/"
         else
           print_line << "\t#{score}"

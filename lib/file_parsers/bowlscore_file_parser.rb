@@ -6,7 +6,6 @@ class BowlscoreFileParser
       @file = File.open(path_to_file)
       @file.read.split("\n").map do |line|
         player, score = line.split(" ")
-        score = score == 'F' ? nil : score.to_i
         [player, score]
       end
     end
