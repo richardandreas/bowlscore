@@ -9,11 +9,24 @@ RSpec.describe PlayerScore do
   let(:jeff_score) { PlayerScore.new(jeff_rolls) }
   let(:john_score) { PlayerScore.new(john_rolls) }
 
-  describe '#scores' do
-    it { expect(jeff_score.scores).to be_a Array }
-    it { expect(jeff_score.scores.length).to eq 10 }
-    it { expect(jeff_score.scores).to eq [20, 39, 48, 66, 74, 84, 90, 120, 148, 167] }
-    it { expect(john_score.scores).to eq [16, 25, 44, 53, 82, 101, 110, 124, 132, 151] }
+  describe '#frames' do
+    it { expect(jeff_score.frames).to be_a Array }
+    it { expect(jeff_score.frames.length).to eq 10 }
+    it { expect(john_score.frames.length).to eq 10 }
+
+    context 'frame rolls' do
+      it { expect(jeff_score.frames.first.rolls).to eq ['10'] }
+      it { expect(jeff_score.frames.last.rolls).to eq ['10', '8', '1'] }
+      it { expect(john_score.frames.first.rolls).to eq ['3', '7'] }
+      it { expect(john_score.frames.last.rolls).to eq ['10', '9', '0'] }
+    end
+
+    context 'frame scores' do
+      it { expect(jeff_score.frames.first.frame_score).to eq 20 }
+      it { expect(jeff_score.frames.last.frame_score).to eq 19 }
+      it { expect(john_score.frames.first.frame_score).to eq 16 }
+      it { expect(john_score.frames.last.frame_score).to eq 19 }
+    end
   end
 
   describe '#valid?' do
