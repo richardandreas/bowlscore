@@ -1,4 +1,5 @@
 require 'player_score'
+require 'score_table_logger'
 require 'file_parsers/bowlscore_file_parser'
 
 # For debugging
