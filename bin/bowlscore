@@ -8,7 +8,7 @@ require 'bowlscore'
 # For debugging
 require 'byebug'
 
-file_path = ENV['FILE_PATH'] || './spec/support/test-input-2.txt'
+file_path = ENV['FILE_PATH'] # || './spec/support/test-input-2.txt'
 
 # If no file path is provided, just ask for one
 unless file_path
