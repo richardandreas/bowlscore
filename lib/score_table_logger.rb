@@ -1,55 +1,57 @@
 # Prints the scoring table to console
 class ScoreTableLogger
-  class << self
-    # Prints the table header
-    def print_header
-      print_line = "Frames"
+  def initialize(frames, player_name)
+    @frames      = frames
+    @player_name = player_name
+  end
 
-      10.times do |index|
-        print_line << "\t\t#{index + 1}"
-      end
+  # Prints the table header
+  def self.print_header
+    print_line = "Frames"
 
-      puts print_line
+    10.times do |index|
+      print_line << "\t\t#{index + 1}"
     end
 
-    # Prints the whole table hody
-    def print(player_score, player_name)
-      puts player_name
-      print_pinfalls(player_score.parsed_rolls, player_score.rolls)
-      print_scores(player_score.scores)
-    end
+    puts print_line
+  end
 
-    def print_pinfalls(parsed_rolls, rolls)
-      print_line  = "Pinfalls"
-      table_index = 0
+  # Prints the table body for one player
+  def print
+    puts @player_name
+    print_pinfalls
+    print_scores
+  end
 
-      parsed_rolls.each_with_index do |score, index|
-        if rolls[index] == 'F'
-          print_line << "\tF"
-        elsif score == 10
-          print_line << "\t" if table_index < 18
-          print_line << "\tX"
-          table_index += 1
-        elsif (table_index % 2 == 1) && (parsed_rolls[index - 1] + score == 10)
-          print_line << "\t/"
-        else
-          print_line << "\t#{score}"
+  def print_pinfalls
+    print_line  = "Pinfalls"
+
+    @frames.each do |frame|
+      print_line << "\t" if frame.rolls.count == 1
+
+      if frame.spare? && !(frame.tenth_frame?)
+        print_line << "\t#{frame.rolls.first}"
+        print_line << "\t/"
+      else
+        frame.rolls.each do |roll|
+          print_line << "\t#{roll == '10' ? 'X' : roll}"
         end
-
-        table_index += 1
       end
-
-      puts print_line
     end
 
-    def print_scores(scores)
-      print_line = "Score"
-  
-      scores.each do |score|
-        print_line << "\t\t#{score}"
-      end
+    puts print_line
+  end
 
-      puts print_line
+  def print_scores
+    print_line  = "Score"
+    scores      = @frames.map { |frame| frame.frame_score }
+    total_score = 0
+
+    scores.each do |score|
+      total_score += score
+      print_line << "\t\t#{total_score}"
     end
+
+    puts print_line
   end
 end
