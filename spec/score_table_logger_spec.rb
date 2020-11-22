@@ -22,6 +22,6 @@ RSpec.describe ScoreTableLogger do
 
   describe '#print' do
     it { expect { ScoreTableLogger.print(player_score, 'Jeff') }
-         .to output(header + "Jeff\n" + pinfalls + scores).to_stdout }
+         .to output("Jeff\n" + pinfalls + scores).to_stdout }
   end
 end
