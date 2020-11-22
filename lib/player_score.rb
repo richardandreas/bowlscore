@@ -1,17 +1,28 @@
 # Initializes with an array of rolls from a single player and calculates the scores of the full
 # game.
+#
+# attributes:
+#   errors:       Array[String]
+#   frames:       Array[PlayerScoreFrame]
+#   rolls:        Array[String]
+#
+# functions:
+#  valid?:        Boolean
+#
 class PlayerScore
-  attr_reader :errors, :parsed_rolls, :rolls, :scores, :total_score, :valid
+  attr_reader :errors, :frames, :rolls
 
   def initialize(rolls)
-    @rolls        = rolls
-    @parsed_rolls = rolls.map { |score| score.to_i }
-    @errors       = []
+    @rolls       = rolls
+    @errors      = []
+    @frames      = []
+    @frame_index = 0
+
+    mount_frame
 
     validate_positive_numbers
+    validate_frame_length
     validate_tenth_frame
-
-    calculate if valid?
   end
 
   def valid?
@@ -20,72 +31,74 @@ class PlayerScore
 
   private
 
-  # Calculates the scores of the player
-  def calculate
-    @scores      = []
-    @total_score = 0
-    @frame_index = 0
+  # Mounts the array of frames recursively
+  def mount_frame
+    return if current_roll.nil?
 
-    10.times do
-      if strike?
-        @total_score += (10 + next_two_points)
-        @frame_index += 1
-      elsif spare?
-        @total_score += (10 + after_next_points)
-        @frame_index += 2
-      else
-        @total_score += (current_points + next_points)
-        @frame_index += 2
-      end
+    frame_rolls = []
 
-      @scores << @total_score
+    if last_frame?
+      frame_rolls = last_rolls
+      @frame_index += 3
+    elsif strike?
+      frame_rolls = [current_roll]
+      @frame_index += 1
+    else
+      frame_rolls = [current_roll, next_roll]
+      @frame_index += 2
     end
 
-  rescue TypeError => e
-    @errors << 'Number of rolls is too short'
+    new_frame  = PlayerScoreFrame.new(frame_rolls, mount_frame)
+    @frames.prepend new_frame
+
+    new_frame
   end
 
   # Checks if the rolls dataset is free of negative numbers
   def validate_positive_numbers
-    @errors << 'Negative points are not allowed' if @parsed_rolls.any? { |n| n < 0 }
+    if @frames.any? { |frame| frame.parsed_rolls.min < 0 }
+      @errors << 'Negative points are not allowed'
+    end
   end
 
-  # Checks for the third roll in tenth frame with strike
-  def validate_tenth_frame
-    @parsed_rolls_count = @parsed_rolls.count + @parsed_rolls.count(10)
-
-    if @parsed_rolls_count == 21 && @parsed_rolls[-2] == 10
-      @errors << 'Tenth frame needs third roll'
-    elsif @parsed_rolls_count >= 21 && !third_roll_in_tenth_frame
+  # Checks if there are exactly 10 frames
+  def validate_frame_length
+    if @frames.count < 10
+      @errors << 'Number of rolls is too short'
+    elsif @frames.count > 10
       @errors << 'Number of rolls is too long'
     end
   end
 
-  def third_roll_in_tenth_frame
-    @parsed_rolls_count == 22 && @parsed_rolls[-3] == 10
+  # Checks for the third roll in tenth frame with strike
+  def validate_tenth_frame
+    if tenth_frame.strike? && tenth_frame.rolls.count < 3
+      @errors << 'Tenth frame needs third roll'
+    end
   end
 
-  def next_points
-    @parsed_rolls[@frame_index + 1]
+  def tenth_frame
+    @frames.last
   end
 
-  def after_next_points
-    @parsed_rolls[@frame_index + 2]
+  def last_rolls
+    @rolls[@frame_index..]
   end
 
-  def next_two_points
-    next_points + after_next_points
+  def next_roll
+    @rolls[@frame_index + 1]
   end
 
-  def current_points
-    @parsed_rolls[@frame_index]
+  def current_roll
+    @rolls[@frame_index]
+  end
+
+  def last_frame?
+    byebug if @rolls[@frame_index..].nil?
+    @rolls[@frame_index..].count <= 3
   end
 
   def strike?
-    current_points == 10
-  end
-
-  def spare?
-    current_points + next_points == 10
+    current_roll == "10"
   end
 end
