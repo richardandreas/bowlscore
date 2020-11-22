@@ -48,7 +48,7 @@ class PlayerScoreFrame
   end
 
   def spare?
-    sum_of_rolls == 10
+    sum_of_rolls == 10 && !(strike?)
   end
 
   private
