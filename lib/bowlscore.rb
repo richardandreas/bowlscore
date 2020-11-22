@@ -1,10 +1,8 @@
+require 'player_score_frame'
 require 'player_score'
 require 'score_table_logger'
 require 'helpers/bowlscore_helper'
 require 'file_parsers/bowlscore_file_parser'
-
-# For debugging
-require 'byebug'
 
 # Main application class
 class Bowlscore
@@ -19,10 +17,12 @@ class Bowlscore
     player_scores.each do |player_name, scores|
       player_score = PlayerScore.new(scores)
 
-      ScoreTableLogger.print(player_score, player_name)
+      unless player_score.valid?
+        puts "ERROR: Player: #{player_name}: #{player_score.errors.join("\n")}"
+        next
+      end
+
+      ScoreTableLogger.new(player_score.frames, player_name).print
     end
   end
 end
-
-# Runs the main application
-Bowlscore.start('./spec/support/test-input-1.txt')
