@@ -5,6 +5,7 @@ RSpec.describe PlayerScore do
   let(:to_less_rolls) { ['3', '7', '6', '3', '10', '8', '1', '10', '10', '9', '0', '7', '3', '4', '4', '9'] }
   let(:to_much_rolls) { ['3', '7', '6', '3', '10', '8', '1', '10', '10', '9', '0', '7', '3', '4', '4', '10', '9', '0', '2'] }
   let(:no_third_roll) { ['3', '7', '6', '3', '10', '8', '1', '10', '10', '9', '0', '7', '3', '4', '4', '10', '9'] }
+  let(:negative_number_roll) { ['10', '-7', '3', '9', '0', '10', '0', '8', '8', '2', 'F', '6', '10', '10', '10', '8', '1'] }
 
   let(:jeff_score) { PlayerScore.new(jeff_rolls) }
   let(:john_score) { PlayerScore.new(john_rolls) }
@@ -37,5 +38,6 @@ RSpec.describe PlayerScore do
     it { expect(PlayerScore.new(to_less_rolls).errors.first).to eq("Number of rolls is too short") }
     it { expect(PlayerScore.new(to_much_rolls).errors.first).to eq("Number of rolls is too long") }
     it { expect(PlayerScore.new(no_third_roll).errors.first).to eq("Tenth frame needs third roll") }
+    it { expect(PlayerScore.new(negative_number_roll).errors.first).to eq("Negative points are not allowed") }
   end
 end
