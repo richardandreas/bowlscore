@@ -8,11 +8,18 @@ RSpec.describe Bowlscore do
   let(:carl_scores) { "Score\t\t30\t\t60\t\t90\t\t120\t\t150\t\t180\t\t210\t\t240\t\t270\t\t300\n" }
 
   describe '#start' do
-    it { expect { Bowlscore.start('./spec/support/test-input-1.txt') }
-         .to output(header + "Jeff\n" + jeff_pinfalls + jeff_scores +
-                             "John\n" + john_pinfalls + john_scores).to_stdout }
+    context 'valid file' do
+      it { expect { Bowlscore.start('./spec/support/test-input-1.txt') }
+          .to output(header + "Jeff\n" + jeff_pinfalls + jeff_scores +
+                              "John\n" + john_pinfalls + john_scores).to_stdout }
 
-    it { expect { Bowlscore.start('./spec/support/test-input-2.txt') }
-    .to output(header + "Carl\n" + carl_pinfalls + carl_scores).to_stdout }
+      it { expect { Bowlscore.start('./spec/support/test-input-2.txt') }
+           .to output(header + "Carl\n" + carl_pinfalls + carl_scores).to_stdout }
+    end
+
+    context 'invalid file' do
+      it { expect { Bowlscore.start('./spec/support/test-input-3.txt') }
+          .to output(header + "ERROR: Player: John: Tenth frame needs third roll\n").to_stdout }
+    end
   end
 end
