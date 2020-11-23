@@ -1,3 +1,4 @@
+# Class responsible for player score calculations.
 # Initializes with an array of rolls from a single player and calculates the scores of the full
 # game.
 #

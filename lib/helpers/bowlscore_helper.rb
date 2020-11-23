@@ -1,6 +1,6 @@
-# General helper methds can be defined here.
+# General helper methds are defined in this module.
 module BowlscoreHelper
-  # Groups mixed score array by player, returning a hashes containing the player name as key and
+  # Groups mixed score arrays by player, returning a hashes containing the player name as key and
   # array of scores.
   def group_by_player(array)
     gruped_hash = {}

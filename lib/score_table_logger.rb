@@ -1,4 +1,15 @@
-# Prints the scoring table to console
+# Prints the scoring table to console.
+#
+# attributes:
+#   frames:        Array[PlayerScoreFrame]
+#   player_name:   String
+#
+# functions:
+#  print_header:   nil
+#  print:          nil
+#  print_pinfalls: nil
+#  print_scores:   nil
+#
 class ScoreTableLogger
   def initialize(frames, player_name)
     @frames      = frames
