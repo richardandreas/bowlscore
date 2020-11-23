@@ -4,10 +4,16 @@ require 'score_table_logger'
 require 'helpers/bowlscore_helper'
 require 'file_parsers/bowlscore_file_parser'
 
-# Main application class
+# Main application class.
+# Initializes with a string containing the path to the file to be read.
+#
+# functions:
+#  start:        nil
+#
 class Bowlscore
   extend BowlscoreHelper
 
+  # Start the application
   def self.start(file_path)
     scores = BowlscoreFileParser.parse(file_path)
     player_scores = group_by_player(scores)
